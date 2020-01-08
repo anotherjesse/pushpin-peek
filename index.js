@@ -1,4 +1,3 @@
-const boardId = 'GVVTEK66m95uoLB5mebB7SyitiqcStEWp92BpHfRPBzb';
 const {Repo} = require('hypermerge');
 const Hyperswarm = require('hyperswarm');
 var express = require('express');
@@ -11,7 +10,7 @@ function getSwarm() {
   });
 }
 
-function urlize(url) {
+function strip(url) {
   let u = url.split('?')[0];
   return u.includes('/') ? u.split('/')[1] : u;
 }
@@ -20,19 +19,22 @@ const cache = {};
 const repo = new Repo({memory: true});
 repo.addSwarm(getSwarm(), {announce: true});
 
-repo.watch(boardId, board => {
-  cache[boardId] = board;
-  const {cards} = board;
-  const urls = Object.values(cards)
-    .map(c => urlize(c.url))
-    .filter(url => !(url in cache));
-  urls.map(url => {
-    cache[url] = null;
-    repo.watch(url, d => {
-      cache[url] = d;
+watch = boardId => {
+  cache[boardId] ||
+    repo.watch(boardId, board => {
+      cache[boardId] = board;
+      const {cards} = board;
+      const urls = Object.values(cards)
+        .map(c => strip(c.url))
+        .filter(url => !(url in cache));
+      urls.map(url => {
+        cache[url] = null;
+        repo.watch(url, d => {
+          cache[url] = d;
+        });
+      });
     });
-  });
-});
+};
 
 function render_card(card) {
   return `<div style="width: ${card.width}px; 
@@ -45,9 +47,9 @@ function render_card(card) {
 }
 
 function render(url) {
-  const content = cache[urlize(url)];
+  const content = cache[strip(url)];
   if (!content) {
-    return 'missing';
+    return 'still peering, refresh?';
   }
   if (content.cards) {
     let body = Object.values(content.cards)
@@ -65,12 +67,20 @@ function render(url) {
     return content.messages.map(m => m.content).join('<br>');
   }
 
-  return `content: ${JSON.stringify(content)}`;
+  return JSON.stringify(content);
 }
 
 var app = express();
 
 app.get('/', function(req, res) {
+  res.send(
+    `<input style="font-size: 300%; width: 90%" type="text" placeholder="pushin boardId" onchange="window.location.pathname=(this.value.split('/')[1]||this.value).split('?')[0]"></input>`
+  );
+});
+
+app.get('/:boardId', (req, res) => {
+  const boardId = strip(req.params.boardId);
+  watch(boardId);
   res.send(render(boardId));
 });
 
