@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "hyperswarm": "^2.3.1",
     "hypermerge": "github:automerge/hypermerge"
   },
   "devDependencies": {
@@ -15,7 +16,6 @@
     "@types/proper-lockfile": "^4.1.1",
     "@types/tape": "^4.2.32",
     "@types/uuid": "^3.4.5",
-    "hyperswarm": "^2.3.1",
     "prettier": "^1.19.1",
     "tape": "^4.11.0",
     "ts-node": "^8.3.0",
