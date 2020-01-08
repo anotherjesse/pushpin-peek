@@ -1,8 +1,9 @@
 {
-  "name": "pushpin-web",
+  "name": "pushpin-peek",
   "version": "0.0.1",
   "description": "simple view of a pushpin board",
   "author": "Jesse Andrews",
+  "license": "MIT",
   "scripts": {
     "start": "node index.js"
   },

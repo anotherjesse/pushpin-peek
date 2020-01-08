@@ -57,9 +57,6 @@ function render(url) {
       .join('');
     return `<!DOCTYPE html><html><head><meta charset="utf-8"/><title>${content.title}</title></head><body bgcolor="${content.backgroundColor}">${body}</body></html>`;
   }
-  if (content.videoId) {
-    return `<img src="https://i1.ytimg.com/vi/${content.videoId}/mqdefault.jpg" />`;
-  }
   if (content.text) {
     return `<pre>${content.text}</pre>`;
   }
@@ -74,7 +71,7 @@ var app = express();
 
 app.get('/', function(req, res) {
   res.send(
-    `<input style="font-size: 300%; width: 90%" type="text" placeholder="pushin boardId" onchange="window.location.pathname=(this.value.split('/')[1]||this.value).split('?')[0]"></input>`
+    `<input style="font-size: 300%; width: 90%" type="text" placeholder="pushpin board?" onchange="window.location.pathname=(this.value.split('/')[1]||this.value).split('?')[0]"></input>`
   );
 });
 
