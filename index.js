@@ -71,7 +71,7 @@ var app = express();
 
 app.get('/', function(req, res) {
   res.send(
-    `<input style="font-size: 300%; width: 90%" type="text" placeholder="pushpin board?" onchange="window.location.pathname=(this.value.split('/')[1]||this.value).split('?')[0]"></input>`
+    `<input style="font-size: 300%; width: 90%" type="text" placeholder="pushpin board?" onchange="window.location.pathname=(this.value.split('/')[1]||this.value).split('?')[0]"></input><br>or look at <a href='/cache.json'>local cache</a>`
   );
 });
 
