@@ -75,6 +75,10 @@ app.get('/', function(req, res) {
   );
 });
 
+app.get('/:cache.json', (req, res) => {
+  res.json(cache);
+});
+
 app.get('/:boardId', (req, res) => {
   const boardId = strip(req.params.boardId);
   watch(boardId);
